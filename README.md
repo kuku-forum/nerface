@@ -20,8 +20,8 @@
 
 ## 📌 Summary
 
-> ![total_model](README.assets/total_model.png)
->
+![total_model](README.assets/total_model-16509147367971.jpg)
+
 > Nerf 모델 및 저자가 공개한 Open source에서 핵심 `Module` 추출
 >
 > `Validation dataset`는 `load `하지 않았으며 `train dataset` 을 통해 학습이 진행되도록 구현함
@@ -32,9 +32,11 @@
 
   <br />
 
-## 📌 Module
+## 📌 Module Fucntion
 
 #### ✍ model_fine, model_coarse: 메인 학습 모델
+
+![model](README.assets/model.png)
 
 ```python
 class ConditionalBlendshapePaperNeRFModel(torch.nn.Module):
@@ -153,65 +155,9 @@ ConditionalBlendshapePaperNeRFModel(
 
   <br />
 
-#### ✍ Positional_encoding:  frequency를 통한 차원 확장
-
-``` python
-def positional_encoding(tensor, num_encoding_functions, include_input=True, log_sampling=True):
-    
-    '''
-    Apply positional encoding to the input.
-
-    Args:
-        tensor (torch.Tensor): Input tensor to be positionally encoded.
-        encoding_size (optional, int): Number of encoding functions used to compute
-            a positional encoding (default: 6).
-        include_input (optional, bool): Whether or not to include the input in the
-            positional encoding (default: True).
-
-    Returns:
-    (torch.Tensor): Positional encoding of the input tensor.
-    
-    torch.linspace(start, end, steps, *, out=None, dtype=None, 
-                    layout=torch.strided, device=None, requires_grad=False) → Tensor
-    '''
-    
-    # Trivially, the input tensor is added to the positional encoding.
-    encoding = [tensor] if include_input else []
-    frequency_bands = None
-    
-    if log_sampling:
-        # frequency_bands -> tensor([1., 2., 4., 8., 16., 32., 64., 128., 256., 512.])
-        frequency_bands = 2.0 ** torch.linspace(
-            0.0,
-            num_encoding_functions - 1,
-            num_encoding_functions,
-            dtype=tensor.dtype,
-            device=tensor.device,
-        )
-    else:
-        # frequency_bands -> tensor([1.0000,  57.7778, 114.5556, 171.3333, 228.1111, 284.8889, 341.6667, 398.4445, 455.2222, 512.0000])
-        frequency_bands = torch.linspace(
-            2.0 ** 0.0,
-            2.0 ** (num_encoding_functions - 1),
-            num_encoding_functions,
-            dtype=tensor.dtype,
-            device=tensor.device,
-        )
-
-    for freq in frequency_bands:
-        for func in [torch.sin, torch.cos]:
-            encoding.append(func(tensor * freq))
-
-    # Special case, for no positional encoding
-    if len(encoding) == 1:
-        return encoding[0]
-    else:
-        return torch.cat(encoding, dim=-1)
-```
-
-  <br />
-
 #### ✍ get_ray_bundle: pose, intrinsics를 통한 ray_direction, ray_center 추출
+
+![ray](README.assets/ray.jpg)
 
 ```` python
 def get_ray_bundle(height: int, width: int, intrinsics, tform_cam2world: torch.Tensor, center = [0.5,0.5]):
@@ -275,6 +221,66 @@ def meshgrid_xy(tensor1: torch.Tensor, tensor2: torch.Tensor) -> (torch.Tensor):
     ii, jj = torch.meshgrid(tensor1, tensor2)
     return ii.transpose(-1, -2), jj.transpose(-1, -2)
 ````
+
+  <br />
+
+![func](README.assets/func.jpg)
+
+#### ✍ Positional_encoding:  frequency를 통한 차원 확장
+
+``` python
+def positional_encoding(tensor, num_encoding_functions, include_input=True, log_sampling=True):
+    
+    '''
+    Apply positional encoding to the input.
+
+    Args:
+        tensor (torch.Tensor): Input tensor to be positionally encoded.
+        encoding_size (optional, int): Number of encoding functions used to compute
+            a positional encoding (default: 6).
+        include_input (optional, bool): Whether or not to include the input in the
+            positional encoding (default: True).
+
+    Returns:
+    (torch.Tensor): Positional encoding of the input tensor.
+    
+    torch.linspace(start, end, steps, *, out=None, dtype=None, 
+                    layout=torch.strided, device=None, requires_grad=False) → Tensor
+    '''
+    
+    # Trivially, the input tensor is added to the positional encoding.
+    encoding = [tensor] if include_input else []
+    frequency_bands = None
+    
+    if log_sampling:
+        # frequency_bands -> tensor([1., 2., 4., 8., 16., 32., 64., 128., 256., 512.])
+        frequency_bands = 2.0 ** torch.linspace(
+            0.0,
+            num_encoding_functions - 1,
+            num_encoding_functions,
+            dtype=tensor.dtype,
+            device=tensor.device,
+        )
+    else:
+        # frequency_bands -> tensor([1.0000,  57.7778, 114.5556, 171.3333, 228.1111, 284.8889, 341.6667, 398.4445, 455.2222, 512.0000])
+        frequency_bands = torch.linspace(
+            2.0 ** 0.0,
+            2.0 ** (num_encoding_functions - 1),
+            num_encoding_functions,
+            dtype=tensor.dtype,
+            device=tensor.device,
+        )
+
+    for freq in frequency_bands:
+        for func in [torch.sin, torch.cos]:
+            encoding.append(func(tensor * freq))
+
+    # Special case, for no positional encoding
+    if len(encoding) == 1:
+        return encoding[0]
+    else:
+        return torch.cat(encoding, dim=-1)
+```
 
   <br />
 
