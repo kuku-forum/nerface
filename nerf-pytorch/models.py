@@ -143,7 +143,7 @@ def run_one_iter_of_nerf(
     rays = torch.cat((ro, rd, near, far), dim=-1)
     rays_ablation = torch.cat((ro, rd_ablations, near, far), dim=-1)
     
-    viewdirs = None  # TODO remove this paragraph
+    viewdirs = None  
     # Provide ray directions as input
     viewdirs = ray_directions_ablation
     viewdirs = viewdirs / viewdirs.norm(p=2, dim=-1).unsqueeze(-1)
@@ -173,6 +173,7 @@ def run_one_iter_of_nerf(
         )
         for i,batch in enumerate(batches)
     ]
+    print(pred[0].shape)
 
     synthesized_images = list(zip(*pred))
     synthesized_images = [

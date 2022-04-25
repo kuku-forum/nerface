@@ -45,9 +45,10 @@ def sample_pdf(bins, weights, num_samples, det=False):
 
 
 def gather_cdf_util(cdf, inds):
-    r"""A very contrived way of mimicking a version of the tf.gather()
+    '''
+    A very contrived way of mimicking a version of the tf.gather()
     call used in the original impl.
-    """
+    '''
     orig_inds_shape = inds.shape
     inds_flat = [inds[i].view(-1) for i in range(inds.shape[0])]
     valid_mask = [
@@ -60,7 +61,5 @@ def gather_cdf_util(cdf, inds):
     ]
     cdf_flat = [cdf[i][ind] for i, ind in enumerate(inds_flat)]
     cdf_flat = [cdf_flat[i] * valid_mask[i] for i in range(len(cdf_flat))]
-    cdf_flat = [
-        cdf_chunk.reshape([1] + list(orig_inds_shape[1:])) for cdf_chunk in cdf_flat
-    ]
+    cdf_flat = [cdf_chunk.reshape([1] + list(orig_inds_shape[1:])) for cdf_chunk in cdf_flat]
     return torch.cat(cdf_flat, dim=0)

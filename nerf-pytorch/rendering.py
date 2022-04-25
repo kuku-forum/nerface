@@ -26,7 +26,7 @@ def predict_and_render_radiance(
     cfg_chunksize = 2048 if mode == 'train' else 65536
     cfg_radiance_field_noise_std = 0.1 if mode == 'train' else 0.
     num_rays = ray_batch.shape[0]
-    ro, rd = ray_batch[..., :3], ray_batch[..., 3:6].clone() # TODO remove clone ablation rays
+    ro, rd = ray_batch[..., :3], ray_batch[..., 3:6].clone() 
     bounds = ray_batch[..., 6:8].view((-1, 1, 2))
     near, far = bounds[..., 0], bounds[..., 1]
     
