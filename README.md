@@ -1,5 +1,9 @@
 # Dynamic  Neural Radiance  Fields for Monocular  4D  Facial  Avatar  Reconstruction
 
+  <br />
+
+  <br />
+
 ## 📌 Brief Information
 
 > Dead line: `2022.04.27 수`
@@ -10,7 +14,9 @@
 >
 > Environment: `GPU-titan X(vram: 12GB)`,` Memory-32GB`, `Window`
 
+  <br />
 
+  <br />
 
 ## 📌 Summary
 
@@ -20,7 +26,9 @@
 >
 > 핵심 모듈: `Nerf Model`, `Positional Encoding`, `Ray Extraction`, `volume_render_radiance_field`
 
+  <br />
 
+  <br />
 
 ## 📌 Module
 
@@ -141,7 +149,7 @@ ConditionalBlendshapePaperNeRFModel(
 )
 ```
 
-
+  <br />
 
 #### ✍ Positional_encoding:  frequency를 통한 차원 확장
 
@@ -199,7 +207,7 @@ def positional_encoding(tensor, num_encoding_functions, include_input=True, log_
         return torch.cat(encoding, dim=-1)
 ```
 
-
+  <br />
 
 #### ✍ get_ray_bundle: pose, intrinsics를 통한 ray_direction, ray_center 추출
 
@@ -266,7 +274,7 @@ def meshgrid_xy(tensor1: torch.Tensor, tensor2: torch.Tensor) -> (torch.Tensor):
     return ii.transpose(-1, -2), jj.transpose(-1, -2)
 ````
 
-
+  <br />
 
 #### ✍ volume_render_radiance_field: radiance field에서 Ray의 sampling된 color, weight를 합하여 반환
 
@@ -327,7 +335,9 @@ def volume_render_radiance_field(
     return rgb_map, disp_map, acc_map, weights, surface_depth
 ````
 
+  <br />
 
+  <br />
 
 ## 📚What I got
 
@@ -340,6 +350,8 @@ def volume_render_radiance_field(
 > 여기서 핵심은 2D image를 Radiance field에 매핑하고 이를 Rendering 하여 novel view, pose, expressions를 가진 2D image를 Reconstruction 한다.
 >
 > 여기서 미리 제공된 Pose와 Intrinsics를 통해 Radiance Field로 매핑이 가능하다는 것을 확인할 수 있었다.
+
+  <br />
 
 #### 2. TO DO
 
@@ -355,7 +367,9 @@ def volume_render_radiance_field(
 >    1. 데이터 촬영 시 데이터 생성
 >    2. Face2Face 및 colmap 기반 데이터 추출
 
+  <br />
 
+  <br />
 
 ## Reference
 
