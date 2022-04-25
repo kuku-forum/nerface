@@ -20,6 +20,8 @@
 
 ## 📌 Summary
 
+> ![total_model](README.assets/total_model.png)
+>
 > Nerf 모델 및 저자가 공개한 Open source에서 핵심 `Module` 추출
 >
 > `Validation dataset`는 `load `하지 않았으며 `train dataset` 을 통해 학습이 진행되도록 구현함
