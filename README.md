@@ -153,6 +153,39 @@ ConditionalBlendshapePaperNeRFModel(
 )
 ```
 
+```python
+# Initialize a coarse-resolution model.
+    model_coarse = ConditionalBlendshapePaperNeRFModel(
+        num_encoding_fn_xyz=10,
+        num_encoding_fn_dir=4,
+        include_input_xyz=True,
+        include_input_dir=False,
+        use_viewdirs=True,
+        num_layers=4,
+        hidden_size=256,
+        include_expression=True
+    )
+    model_coarse.to(device)
+    
+    # If a fine-resolution model is specified, initialize it.
+    model_fine = ConditionalBlendshapePaperNeRFModel(
+        num_encoding_fn_xyz=10,
+        num_encoding_fn_dir=4,
+        include_input_xyz=True,
+        include_input_dir=False,
+        use_viewdirs=True,
+        num_layers = 4,
+        hidden_size =256,
+        include_expression=True
+    )
+    model_fine.to(device)
+
+    # run model
+    network_fn(batch, expressions, latent_code)
+```
+
+
+
   <br />
 
 #### ✍ get_ray_bundle: pose, intrinsics를 통한 ray_direction, ray_center 추출
